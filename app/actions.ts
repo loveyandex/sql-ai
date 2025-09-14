@@ -12,7 +12,7 @@ import { Pool } from "pg";
 import "dotenv/config";
 
 const openai = createOpenAI({
-  baseURL: "https://api.sambanova.ai/v1",
+  baseURL:process.env.OPENAI_BASE_URL,
   apiKey: process.env.OPENAI_API_KEY,
 });
 
