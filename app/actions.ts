@@ -228,9 +228,8 @@ export const generateChartConfig = async (
       Data:
       ${JSON.stringify(results, null, 2)}`
 
-  console.log("promps", prompt)
-
-  console.log("schema", configSchema)
+  // console.log("promps", prompt)
+  // console.log("schema", configSchema)
 
   try {
     const { object: config } = await generateObject({
