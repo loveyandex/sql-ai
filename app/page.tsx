@@ -103,7 +103,7 @@ export default function Page() {
               id="main-container"
               className="flex-grow flex flex-col sm:min-h-[420px]"
             >
-              <div className="flex-grow h-full">
+              <div className="flex-grow h-full relative kos" >
                 <AnimatePresence mode="wait">
                   {!submitted ? (
                     <SuggestedQueries

@@ -8,7 +8,7 @@ import { z } from "zod";
 
 
 
-import { Pool } from "pg"; 
+import { Pool } from "pg";
 import "dotenv/config";
 
 const openai = createOpenAI({
@@ -22,7 +22,7 @@ export const generateQuery = async (input: string) => {
   "use server";
   try {
     const result = await generateObject({
-      model: openai("gpt-oss-120b"),
+      model: openai("Llama-4-Maverick-17B-128E-Instruct"),
       system: `You are a SQL (postgres) and data visualization expert. Your job is to help the user write a SQL query to retrieve the data they need. The table schema is as follows:
 
       unicorns (
@@ -93,7 +93,8 @@ export const runGeneratedSQLQuery = async (query: string): Promise<Result[]> => 
   const lowerQuery = query.trim().toLowerCase();
 
   if (
-    !lowerQuery.startsWith("select") ||
+    // !lowerQuery.startsWith("select") ||
+    // !lowerQuery.startsWith("with") ||
     lowerQuery.includes("drop") ||
     lowerQuery.includes("delete") ||
     lowerQuery.includes("insert") ||
@@ -163,7 +164,7 @@ export const explainQuery = async (input: string, sqlQuery: string) => {
   "use server";
   try {
     const result = await generateObject({
-      model: openai("gpt-oss-120b"),
+      model: openai("Llama-4-Maverick-17B-128E-Instruct"),
       schema: z.object({
         explanations: explanationsSchema,
       }),
@@ -205,11 +206,7 @@ export const generateChartConfig = async (
   "use server";
   const system = `You are a data visualization expert. `;
 
-  try {
-    const { object: config } = await generateObject({
-      model: openai("gpt-oss-120b"),
-      system,
-      prompt: `Given the following data from a SQL query result, generate the chart config that best visualises the data and answers the users query.
+  const prompt = `Given the following data from a SQL query result, generate the chart config that best visualises the data and answers the users query.
       For multiple groups use multi-lines.
 
       Here is an example complete config:
@@ -229,7 +226,17 @@ export const generateChartConfig = async (
       ${userQuery}
 
       Data:
-      ${JSON.stringify(results, null, 2)}`,
+      ${JSON.stringify(results, null, 2)}`
+
+  console.log("promps", prompt)
+
+  console.log("schema", configSchema)
+
+  try {
+    const { object: config } = await generateObject({
+      model: openai("Llama-4-Maverick-17B-128E-Instruct"),
+      system,
+      prompt,
       schema: configSchema,
     });
 
