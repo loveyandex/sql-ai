@@ -13,9 +13,9 @@ export const ProjectInfo = () => {
           <Link
             target="_blank"
             className="text-primary hover:text-primary/90 underline"
-            href="https://sdk.vercel.ai"
+            href="https://google.com"
           >
-            AI SDK
+            AGI Mind
           </Link>{" "}
           to allow you to query a PostgreSQL database with natural language. The
           dataset is CB Insights&apos; list of all unicorn companies. Learn more
@@ -29,7 +29,7 @@ export const ProjectInfo = () => {
           </Link>
           .
           <div className="mt-4 sm:hidden">
-            <DeployButton />
+           AGI: Ablfazl GPU 
           </div>
         </AlertDescription>
       </Alert>
