@@ -1,16 +1,28 @@
 "use server";
 
 import { Config, configSchema, explanationsSchema, Result } from "@/lib/types";
-import { openai } from "@ai-sdk/openai";
+import { createOpenAI } from "@ai-sdk/openai";
 import { sql } from "@vercel/postgres";
 import { generateObject } from "ai";
 import { z } from "zod";
+
+
+
+import { Pool } from "pg"; 
+import "dotenv/config";
+
+const openai = createOpenAI({
+  baseURL: "https://api.cerebras.ai/v1",
+  apiKey: process.env.CEREBRAS_API_KEY,
+});
+
+
 
 export const generateQuery = async (input: string) => {
   "use server";
   try {
     const result = await generateObject({
-      model: openai("gpt-4o"),
+      model: openai("gpt-oss-120b"),
       system: `You are a SQL (postgres) and data visualization expert. Your job is to help the user write a SQL query to retrieve the data they need. The table schema is as follows:
 
       unicorns (
@@ -64,7 +76,54 @@ export const generateQuery = async (input: string) => {
   }
 };
 
-export const runGenerateSQLQuery = async (query: string) => {
+
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+});
+
+/**
+ * Executes a SQL query and returns the result data
+ * @param {string} query - The SQL query to execute
+ * @returns {Promise<Result[]>} Array of query results
+ * @throws {Error} If query is not a SELECT statement or table doesn't exist
+ */
+export const runGeneratedSQLQuery = async (query: string): Promise<Result[]> => {
+  "use server";
+
+  const lowerQuery = query.trim().toLowerCase();
+
+  if (
+    !lowerQuery.startsWith("select") ||
+    lowerQuery.includes("drop") ||
+    lowerQuery.includes("delete") ||
+    lowerQuery.includes("insert") ||
+    lowerQuery.includes("update") ||
+    lowerQuery.includes("alter") ||
+    lowerQuery.includes("truncate") ||
+    lowerQuery.includes("create") ||
+    lowerQuery.includes("grant") ||
+    lowerQuery.includes("revoke")
+  ) {
+    throw new Error("Only SELECT queries are allowed");
+  }
+
+  try {
+    const result = await pool.query(query);
+    return result.rows as Result[];
+  } catch (e: any) {
+    if (e.message.includes('relation "unicorns" does not exist')) {
+      console.log(
+        'Table does not exist, creating and seeding it with dummy data now...'
+      );
+      throw new Error("Table does not exist");
+    } else {
+      throw e;
+    }
+  }
+};
+
+
+export const runGenerateSQLQuery2 = async (query: string) => {
   "use server";
   // Check if the query is a SELECT statement
   if (
@@ -104,7 +163,7 @@ export const explainQuery = async (input: string, sqlQuery: string) => {
   "use server";
   try {
     const result = await generateObject({
-      model: openai("gpt-4o"),
+      model: openai("gpt-oss-120b"),
       schema: z.object({
         explanations: explanationsSchema,
       }),
@@ -148,7 +207,7 @@ export const generateChartConfig = async (
 
   try {
     const { object: config } = await generateObject({
-      model: openai("gpt-4o"),
+      model: openai("gpt-oss-120b"),
       system,
       prompt: `Given the following data from a SQL query result, generate the chart config that best visualises the data and answers the users query.
       For multiple groups use multi-lines.

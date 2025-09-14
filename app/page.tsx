@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   generateChartConfig,
   generateQuery,
-  runGenerateSQLQuery,
+  runGeneratedSQLQuery,
 } from "./actions";
 import { Config, Result } from "@/lib/types";
 import { Loader2 } from "lucide-react";
@@ -46,7 +46,7 @@ export default function Page() {
       }
       setActiveQuery(query);
       setLoadingStep(2);
-      const companies = await runGenerateSQLQuery(query);
+      const companies = await runGeneratedSQLQuery(query);
       const columns = companies.length > 0 ? Object.keys(companies[0]) : [];
       setResults(companies);
       setColumns(columns);
