@@ -12,8 +12,8 @@ import { Pool } from "pg";
 import "dotenv/config";
 
 const openai = createOpenAI({
-  baseURL: "https://api.cerebras.ai/v1",
-  apiKey: process.env.CEREBRAS_API_KEY,
+  baseURL: "https://api.sambanova.ai/v1",
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 
