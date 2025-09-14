@@ -18,14 +18,14 @@ export const ProjectInfo = () => {
             AGI Mind
           </Link>{" "}
           to allow you to query a PostgreSQL database with natural language. The
-          dataset is CB Insights&apos; list of all unicorn companies. Learn more
+          platform is under develop to support all Admin's database tasks. No Learn more
           at{" "}
           <Link
-            href="https://www.cbinsights.com/research-unicorn-companies"
+            href="https://gitlab.local/gpt-sql"
             target="_blank"
             className="text-primary hover:text-primary/90 underline"
           >
-            CB Insights
+            Made with ❤
           </Link>
           .
           <div className="mt-4 sm:hidden">
