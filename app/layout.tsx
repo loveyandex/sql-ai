@@ -7,9 +7,12 @@ import { Toaster } from "@/components/ui/sonner"
 
 export const metadata = {
   metadataBase: new URL("https://natural-language-postgres.vercel.app"),
-  title: "Natural Language Postgres",
+  title: "✨GPT SQL: AGI",
   description:
     "Chat with a Postgres database using natural language powered by the AI SDK by Vercel.",
+  icons: {
+    icon:  { url: '/favicon.svg', type: 'image/svg+xml' },
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +25,7 @@ export default function RootLayout({
       <body className={`${GeistMono.className} ${GeistSans.className}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-           <Toaster />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

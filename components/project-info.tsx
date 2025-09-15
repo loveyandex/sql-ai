@@ -18,7 +18,7 @@ export const ProjectInfo = () => {
             AGI Mind
           </Link>{" "}
           to allow you to query a PostgreSQL database with natural language. The
-          platform is under develop to support all Admin's database tasks. No Learn more
+          platform is under develop to support all Admin&apos;s database tasks. No Learn more
           at{" "}
           <Link
             href="https://gitlab.local/gpt-sql"
